@@ -14,8 +14,9 @@
                             <h4>HTML5 Form Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('users.create')}}" method="post">
+                            <form action="{{ route('users.edit',$user)}}" method="post">
                                 @csrf
+                                @method('put')
                                 <div class="form-group">
                                     <label>Name</label>
                                     <input type="text" class="form-control" placeholder="Name" name="name" value="{{ old('name') ?? $user->name}}">
@@ -25,7 +26,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('name') ?? $user->email}}" >
+                                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('em') ?? $user->email}}" >
                                     @error('email')
                                         <div class="mt-2 text-danger">{{ $message }}</div>
                                     @enderror
@@ -51,9 +52,12 @@
 
                                 <div class="form-group">
                                     <label>Roles</label>
-                                    <select class="form-control" multiple="" data-height="100%" style="height: 100%;" name="roles[]">
-                                        @foreach ($roles as $role)
-                                            <option value="{{$role->name}}">{{$role->name}}</option>
+                                    <select class="form-control" name="roles[]">
+                                        <option selected disabled>Choose role</option>
+                                        @foreach ($roles as $roleId => $roleName)
+                                            <option {{ in_array($roleId,$userRole) ? 'selected':'' }} value="{{$roleId}}"> 
+                                                {{$roleName}}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

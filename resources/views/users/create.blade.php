@@ -11,21 +11,23 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-header">
-                            <h4>HTML5 Form Basic</h4>
+                            <div class="card-header-action">
+                                <a href="{{ route('users.index')}}" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Back</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('users.create')}}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" class="form-control" placeholder="Name" name="name">
+                                    <input type="text" class="form-control" placeholder="Name" name="name" value="{{old('name')}}">
                                     @error('name')
                                         <div class="mt-2 text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="email" class="form-control" placeholder="Email" name="email">
+                                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{old('email')}}">
                                     @error('email')
                                         <div class="mt-2 text-danger">{{ $message }}</div>
                                     @enderror
@@ -51,9 +53,10 @@
 
                                 <div class="form-group">
                                     <label>Roles</label>
-                                    <select class="form-control" multiple="" data-height="100%" style="height: 100%;" name="roles[]">
+                                    <select class="form-control" data-height="100%" style="height: 100%;" name="roles">
+                                        <option selected disabled>Choose role</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{$role->name}}">{{$role->name}}</option>
+                                            <option value="{{$role->id}}">{{$role->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

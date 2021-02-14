@@ -52,8 +52,10 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('users.show',$user)}}" class="btn btn-primary" >show</a>
-                                            <a href="{{ route('users.edit',$user)}}" class="btn btn-primary" >edit</a>
-                                            <a href="{{route('users.delete',$user)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                                            @role('super-admin')
+                                                <a href="{{ route('users.edit',$user)}}" class="btn btn-primary" >edit</a>
+                                                <a href="{{route('users.delete',$user)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                                            @endrole
                                         </td>
                                     </tr>
                                 @endforeach
