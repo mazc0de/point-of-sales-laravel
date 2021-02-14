@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $title = "Users List";
-        $users = User::orderBy('id','DESC')->paginate(5);
+        $users = User::orderBy('id','ASC')->paginate(5);
 
         return view('users.index', compact('title','users'));
     }
@@ -22,13 +23,13 @@ class UserController extends Controller
     public function create()
     {
         $title = "Add Users";
-        $roles = Role::pluck('name','name')->all();
+        $roles = Role::all();
         return view('users.create', compact('title','roles'));
     }
 
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -54,19 +55,23 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $title = "Edit User : ".$user->name;
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
+        $title = "Edit User : ". $user->name;
+        $roles = Role::pluck('name','id')->all();
+        $userRole = $user->roles->pluck('id')->all();
+        // dd($userRole);
+        // dd($roles);
+
 
         return view('users.edit', compact('title','user','roles','userRole'));
     }
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:password_confirmation',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'password' => 'same:password_confirmation',
             'roles' => 'required'
         ]);
 
