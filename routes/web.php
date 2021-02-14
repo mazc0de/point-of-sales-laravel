@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{UserController,RoleController};
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Contracts\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,18 @@ Route::middleware('auth')->group(function(){
         Route::put('edit/{user:id}', [UserController::class, 'update']);
         Route::get('delete/{user:id}', [UserController::class, 'destroy'])->name('users.delete');
     });
-    Route::resource('roles', RoleController::class);
+
+    Route::group(['middleware' => ['role:super-admin']], function () {
+        Route::prefix('roles')->group(function(){
+            Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+            Route::get('role/{roles:id}', [RoleController::class, 'show'])->name('roles.show');
+            Route::get('create', [RoleController::class, 'create'])->name('roles.create');
+            Route::post('create', [RoleController::class, 'store']);
+            Route::get('edit/{role:id}', [RoleController::class, 'edit'])->name('roles.edit');
+            Route::put('edit/{role:id}', [RoleController::class, 'update']);
+            Route::get('delete/{role:id}', [RoleController::class, 'destroy'])->name('roles.delete');
+        });
+    });
+
     Route::resource('products', ProductController::class);
 });
